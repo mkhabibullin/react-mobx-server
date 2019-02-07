@@ -8,7 +8,7 @@ namespace AspCore
 {
     public class Chat : Hub
     {
-        public async Task send(string nick, string message)
+        public async Task Send(string nick, string message)
         {
             await Clients.All.SendAsync("Send", message);
         }
