@@ -41,6 +41,7 @@ namespace AspCore.Controllers
         [HttpGet]
         public IActionResult GetFolders()
         {
+            if (!Directory.Exists(Folder)) return Ok();
             var folders = Directory.GetDirectories(Folder);
 
             var result = new List<FoldersModel>();

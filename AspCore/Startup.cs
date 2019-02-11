@@ -33,7 +33,7 @@ namespace AspCore
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials()
-                .WithOrigins("http://localhost:3000");
+                .AllowAnyOrigin();
             }));
 
             services.AddSignalR();
@@ -51,10 +51,10 @@ namespace AspCore
                 //app.UseHsts();
             }
 
+            app.UseCors("CorsPolicy");
+
             //app.UseHttpsRedirection();
             app.UseMvc();
-            
-            app.UseCors("CorsPolicy");
 
             app.UseSignalR(routes =>
             {
