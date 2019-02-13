@@ -60,6 +60,7 @@ namespace AspCore
             app.UseSignalR(routes =>
             {
                 routes.MapHub<Chat>("/chat");
+                routes.MapHub<FilesHub>("/files");
             });
         }
     }

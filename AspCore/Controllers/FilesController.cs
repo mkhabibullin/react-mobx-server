@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,10 +22,19 @@ namespace AspCore.Controllers
     {
         private const string Folder = "files";
         private readonly IHostingEnvironment _appEnvironment;
+        private readonly IHubContext<FilesHub> FileHub;
 
-        public FilesController(IHostingEnvironment appEnvironment)
+        public FilesController(IHostingEnvironment appEnvironment, IHubContext<FilesHub> fileHub)
         {
             _appEnvironment = appEnvironment;
+            FileHub = fileHub;
+        }
+
+        [HttpGet("test")]
+        public async Task<IActionResult> Test()
+        {
+            await FileHub.Clients.All.SendAsync("Send", "From Server", "Test");
+            return Ok();
         }
 
         [HttpPost]
@@ -45,6 +55,8 @@ namespace AspCore.Controllers
                     return BadRequest(ModelState);
                 }
             }
+
+            await FileHub.Clients.All.SendAsync("Updated");
 
             return Ok(viewModel);
         }
