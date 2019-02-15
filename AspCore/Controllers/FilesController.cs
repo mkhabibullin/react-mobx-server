@@ -1,8 +1,6 @@
-﻿using Application.Files.Models;
-using Application.Files.Queries;
+﻿using Application.Files.Queries;
 using AspCore.Attributes;
 using AspCore.Extensions;
-using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -121,14 +119,5 @@ namespace AspCore.Controllers
 
     public class FoldersModel
     {
-        public FoldersModel(string name, DateTime createdAt)
-        {
-            Name = name;
-            CreatedAt = createdAt;
-        }
-
-        public string Name { get; }
-
-        public DateTime CreatedAt { get; }
     }
 }
