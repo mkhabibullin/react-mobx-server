@@ -20,7 +20,7 @@ Thumbs.db
 *.userprefs
 
 # Files
-files/
+AspCore/files/
 
 # Build results
 [Dd]ebug/
