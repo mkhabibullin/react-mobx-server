@@ -1,6 +1,9 @@
-﻿namespace Application.Files.Queries
+﻿using Application.Files.Models;
+using MediatR;
+
+namespace Application.Files.Queries
 {
-    public class GetDirectoryQuery
+    public class GetDirectoryQuery : IRequest<DirectoryDto[]>
     {
     }
 }
