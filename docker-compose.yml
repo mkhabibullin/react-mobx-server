@@ -1,0 +1,10 @@
+version: '3'
+services:
+  web:
+    image: 12345678901480/react-app
+    ports:
+     - "3000:3000"
+  api:
+    image: 12345678901480/dockerized
+    ports:
+     - "5000:80"
