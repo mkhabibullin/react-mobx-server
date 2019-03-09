@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AspCore.Extensions;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.WindowsServices;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace AspCore
 {
@@ -31,7 +28,7 @@ namespace AspCore
 
             if (isService)
             {
-                host.RunAsService();
+                host.RunAsCustomService();
             }
             else
             { 
