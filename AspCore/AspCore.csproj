@@ -8,6 +8,7 @@
     <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
     <UserSecretsId>2e8b0110-127f-4806-a0e1-b223b96ff68d</UserSecretsId>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
