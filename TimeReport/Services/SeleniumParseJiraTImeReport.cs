@@ -50,6 +50,9 @@ namespace TimeReport.Services
                 {
                     driver.Navigate().GoToUrl(link.href);
 
+                    var workLoadLink = driver.WaitUntil(d => d.FindElement(By.Id("worklog-tabpanel")));
+                    workLoadLink.Click();
+
                     var actionContainers = driver
                         .WaitUntil(d => d.FindElements(By.CssSelector(".actionContainer")));
 
