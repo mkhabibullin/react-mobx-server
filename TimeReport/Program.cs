@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -9,6 +10,8 @@ namespace TimeReport
 {
     public class Program
     {
+        public static IConfiguration Configuration { get; set; }
+
         public static void Main(string[] args)
         {
             var isService = !(Debugger.IsAttached || args.Contains("--console"));
@@ -19,6 +22,10 @@ namespace TimeReport
                 var pathToContentRoot = Path.GetDirectoryName(pathToExe);
                 Directory.SetCurrentDirectory(pathToContentRoot);
             }
+
+            var configBuilder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json");
+            Configuration = configBuilder.Build();
 
             var builder = CreateWebHostBuilder(
                 args.Where(arg => arg != "--console").ToArray());
@@ -39,6 +46,7 @@ namespace TimeReport
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseUrls(Configuration.GetValue<string>("Urls"))
                 .UseStartup<Startup>();
     }
 }
