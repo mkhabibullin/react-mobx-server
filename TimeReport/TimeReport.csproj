@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <Platforms>AnyCPU;x64</Platforms>
+    <SelfContained>false</SelfContained>
+    <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +16,7 @@
     <PackageReference Include="MediatR.Extensions" Version="0.6.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="MongoDB.Driver" Version="2.9.0-beta1" />
