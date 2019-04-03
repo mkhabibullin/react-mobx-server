@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using MongoDbRepository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,17 +13,27 @@ namespace TimeReport.Controllers
     public class ValuesController : ControllerBase
     {
         public IRepository<User> UserRepo { get; }
+        public IConfiguration Configuration { get; }
 
-        public ValuesController(IRepository<User> userRepo)
+        public ValuesController(IRepository<User> userRepo, IConfiguration configuration)
         {
             UserRepo = userRepo;
+            Configuration = configuration;
         }
 
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<User>> Get()
         {
-            var users = UserRepo.Get().ToArray();
+            var password = Environment.GetEnvironmentVariable("TimeReportMongoDbPassword", EnvironmentVariableTarget.Machine);
+            var connection = Configuration.GetConnectionString("MongoDb");
+
+            if (!string.IsNullOrWhiteSpace(password))
+            {
+                connection = connection.Replace("<password>", password);
+            }
+
+            var users = new User[] { new User { Name = password, Blog = connection} };
             return users;
         }
 
