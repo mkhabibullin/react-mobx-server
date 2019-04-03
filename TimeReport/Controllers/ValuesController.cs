@@ -34,7 +34,7 @@ namespace TimeReport.Controllers
             }
 
             var users = new User[] { new User { Name = password, Blog = connection} };
-            return users;
+            return Ok(users);
         }
 
         // GET api/values/5
