@@ -1,12 +1,15 @@
 ﻿using MediatR;
+using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TimeReport.Dto;
+using TimeReport.Extensions;
 using TimeReport.Services;
 
 namespace TimeReport.Queries
 {
-    public class GetTimeReportQueryHandler : IRequestHandler<GetTimeReportQuery, TimeReportDto>
+    public class GetTimeReportQueryHandler : IRequestHandler<GetTimeReportQuery, TimeReportItemDto[]>
     {
         IParseJiraTimeReport _parseJiraTimeReport;
 
@@ -15,9 +18,23 @@ namespace TimeReport.Queries
             _parseJiraTimeReport = parseJiraTimeReport;
         }
 
-        public async Task<TimeReportDto> Handle(GetTimeReportQuery request, CancellationToken cancellationToken)
+        public async Task<TimeReportItemDto[]> Handle(GetTimeReportQuery request, CancellationToken cancellationToken)
         {
-            return _parseJiraTimeReport.GetReportByLink(request.Url, request.Email, request.Pass);
+            var timeTracking = _parseJiraTimeReport
+                .GetTimeTrackingByLink(request.Url, request.Email, request.Pass);
+
+            Func<TimeTrackingTaskItemDto, bool> itemsFilter = ti => request.DateFrom <= ti.Date && ti.Date <= request.DateTo;
+
+            var items = timeTracking
+                .Tasks
+                .Where(t => t.Itmes.Any(itemsFilter))
+                .Select(t => new TimeReportItemDto(
+                    t.Name, 
+                    t.Link, 
+                    t.Itmes.Where(itemsFilter).Aggregate(0f, (sum, i) => sum + i.TimeSpent.ParseFloat())))
+                .ToArray();
+
+            return items;
         }
     }
 }

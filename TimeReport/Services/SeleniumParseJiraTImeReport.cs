@@ -12,9 +12,9 @@ namespace TimeReport.Services
 {
     public class SeleniumParseJiraTImeReport : IParseJiraTimeReport
     {
-        public TimeReportDto GetReportByLink(string url, string email, string pass)
+        public TimeTrackingDto GetTimeTrackingByLink(string url, string email, string pass)
         {
-            var result = new TimeReportDto();
+            var result = new TimeTrackingDto();
 
             var chromeOptions = new ChromeOptions();
             chromeOptions.AddArguments("headless");
@@ -50,21 +50,21 @@ namespace TimeReport.Services
                 {
                     driver.Navigate().GoToUrl(link.href);
 
-                    var workLoadLink = driver.WaitUntil(d => d.FindElement(By.Id("worklog-tabpanel")));
-                    workLoadLink.Click();
+                    var workLoadLink = driver.WaitUntil(d => d.FindElement(By.CssSelector("a #worklog-tabpanel")));
+                    workLoadLink?.Click();
 
                     var actionContainers = driver
                         .WaitUntil(d => d.FindElements(By.CssSelector(".actionContainer")));
 
                     if (actionContainers.Any())
                     {
-                        var task = new TimeReportTaskDto(link.title, link.href);
+                        var task = new TimeTrackingTaskDto(link.title, link.href);
                         foreach (var ac in actionContainers)
                         {
                             var date = ac.FindElement(By.CssSelector(".action-details span .date"));
                             var spent = ac.FindElement(By.CssSelector(".worklog-duration"));
 
-                            task.Itmes.Add(new TimeReportTaskItemDto(DateTime.Parse(date.Text), spent.Text, ""));
+                            task.Itmes.Add(new TimeTrackingTaskItemDto(DateTime.Parse(date.Text), spent.Text, ""));
                         }
                         result.Tasks.Add(task);
                     }

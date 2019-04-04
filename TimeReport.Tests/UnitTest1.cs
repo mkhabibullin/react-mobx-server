@@ -81,7 +81,7 @@ namespace TimeReport.Tests
             var email = Environment.GetEnvironmentVariable("TestReportEmail", EnvironmentVariableTarget.User);
             var pass = Environment.GetEnvironmentVariable("TestReportPass", EnvironmentVariableTarget.User);
 
-            var report = service.GetReportByLink(url, email, pass);
+            var report = service.GetTimeTrackingByLink(url, email, pass);
 
             foreach(var t in report.Tasks)
             {

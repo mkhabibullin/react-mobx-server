@@ -37,8 +37,17 @@ namespace TimeReport.Extensions
         /// <returns></returns>
         public static TResult WaitUntil<TResult>(this IWebDriver driver, Func<IWebDriver, TResult> condition, int seconds = 15)
         {
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(seconds));
-            return wait.Until(condition);
+            try
+            {
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(seconds));
+                return wait.Until(condition);
+            }
+            catch (Exception exc)
+            {
+                if(exc is NoSuchElementException || exc is WebDriverTimeoutException)
+                    return default(TResult);
+                throw;
+            }
         }
 
         /// <summary>

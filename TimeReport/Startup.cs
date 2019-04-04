@@ -10,6 +10,8 @@ using MediatR;
 using MediatR.Pipeline;
 using System.Reflection;
 using TimeReport.Services;
+using Newtonsoft.Json;
+using TimeReport.ModelBinders;
 
 namespace TimeReport
 {
@@ -25,7 +27,11 @@ namespace TimeReport
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(options => 
+                {
+                    options.ModelBinderProviders.Insert(0, new DateTimeModelBinderProvider());
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.RegisterMongoDbRepository(Configuration, Environment.GetEnvironmentVariable("TimeReportMongoDbPassword", EnvironmentVariableTarget.Machine));
 

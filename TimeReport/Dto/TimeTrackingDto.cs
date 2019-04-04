@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace TimeReport.Dto
 {
-    public class TimeReportDto
+    public class TimeTrackingDto
     {
-        public ICollection<TimeReportTaskDto> Tasks { get; set; } = new List<TimeReportTaskDto>();
+        public ICollection<TimeTrackingTaskDto> Tasks { get; set; } = new List<TimeTrackingTaskDto>();
     }
 
-    public class TimeReportTaskDto
+    public class TimeTrackingTaskDto
     {
-        public TimeReportTaskDto(string name, string link)
+        public TimeTrackingTaskDto(string name, string link)
         {
             Name = name;
             Link = link;
@@ -20,12 +20,12 @@ namespace TimeReport.Dto
 
         public string Link { get; set; }
 
-        public ICollection<TimeReportTaskItemDto> Itmes { get; set; } = new List<TimeReportTaskItemDto>();
+        public ICollection<TimeTrackingTaskItemDto> Itmes { get; set; } = new List<TimeTrackingTaskItemDto>();
     }
 
-    public class TimeReportTaskItemDto
+    public class TimeTrackingTaskItemDto
     {
-        public TimeReportTaskItemDto(DateTime date, string timeSpent, string comment)
+        public TimeTrackingTaskItemDto(DateTime date, string timeSpent, string comment)
         {
             Date = date;
             TimeSpent = timeSpent;
