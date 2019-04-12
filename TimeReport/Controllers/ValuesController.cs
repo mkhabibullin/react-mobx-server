@@ -17,25 +17,31 @@ namespace TimeReport.Controllers
         {
             UserRepo = userRepo;
         }
-
-        // GET api/values
+        
         [HttpGet]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(IEnumerable<User>), 200)]
+        [ProducesResponseType(404)]
         public ActionResult<IEnumerable<User>> Get()
         {
             var users = UserRepo.Get().ToArray();
             return users;
         }
-
-        // GET api/values/5
+        
         [HttpGet("{id}")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(User), 200)]
+        [ProducesResponseType(404)]
         public ActionResult<User> Get(string id)
         {
             var user = UserRepo.GetById(id);
             return user;
         }
-
-        // POST api/values
+        
         [HttpPost]
+        [Produces("application/json")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         public void Create([FromBody] string value)
         {
             UserRepo.Add(new User {
@@ -43,9 +49,11 @@ namespace TimeReport.Controllers
                 Age = new Random().Next(50)
             });
         }
-
-        // DELETE api/values/5
+        
         [HttpDelete("{id}")]
+        [Produces("application/json")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         public void Delete(string id)
         {
             UserRepo.Delete(id);

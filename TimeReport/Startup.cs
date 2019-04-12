@@ -1,17 +1,16 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using MediatR;
+using MediatR.Pipeline;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDbRepository.Extensions;
-using System;
 using Swashbuckle.AspNetCore.Swagger;
-using MediatR;
-using MediatR.Pipeline;
+using System;
 using System.Reflection;
-using TimeReport.Services;
-using Newtonsoft.Json;
 using TimeReport.ModelBinders;
+using TimeReport.Services;
 
 namespace TimeReport
 {
@@ -37,7 +36,7 @@ namespace TimeReport
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "My API", Version = "v1" });
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
             });
 
             // Add MediatR
@@ -66,7 +65,7 @@ namespace TimeReport
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "TimeReport API V1");
             });
         }
     }

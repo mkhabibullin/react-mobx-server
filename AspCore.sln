@@ -20,6 +20,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MongoDbRepository", "MongoD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeReport.Tests", "TimeReport.Tests\TimeReport.Tests.csproj", "{EA94C87F-D3AA-4419-912D-6A01659863D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGetway", "ApiGetway\ApiGetway.csproj", "{BF3291BA-CA6C-4AC8-87A8-8DB977B0472B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{EA94C87F-D3AA-4419-912D-6A01659863D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA94C87F-D3AA-4419-912D-6A01659863D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA94C87F-D3AA-4419-912D-6A01659863D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF3291BA-CA6C-4AC8-87A8-8DB977B0472B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF3291BA-CA6C-4AC8-87A8-8DB977B0472B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF3291BA-CA6C-4AC8-87A8-8DB977B0472B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF3291BA-CA6C-4AC8-87A8-8DB977B0472B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
