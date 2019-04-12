@@ -11,6 +11,8 @@ namespace ApiGetway
 {
     public class Program
     {
+        public static IConfiguration Configuration { get; set; }
+
         public static void Main(string[] args)
         {
             var isService = !(Debugger.IsAttached || args.Contains("--console"));
@@ -21,6 +23,10 @@ namespace ApiGetway
                 var pathToContentRoot = Path.GetDirectoryName(pathToExe);
                 Directory.SetCurrentDirectory(pathToContentRoot);
             }
+
+            var configBuilder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json");
+            Configuration = configBuilder.Build();
 
             var builder = CreateWebHostBuilder(
             args.Where(arg => arg != "--console").ToArray());
@@ -41,6 +47,7 @@ namespace ApiGetway
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseUrls(Configuration.GetValue<string>("Urls"))
                 // Add the code below to the
                 // Program.cs file @ BuildWebHost method
                 .ConfigureAppConfiguration((hostingContext, config) =>

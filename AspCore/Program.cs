@@ -1,6 +1,7 @@
 ﻿using AspCore.Extensions;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
@@ -11,6 +12,8 @@ namespace AspCore
 {
     public class Program
     {
+        public static IConfiguration Configuration { get; set; }
+
         public static void Main(string[] args)
         {
             var isService = !(Debugger.IsAttached || args.Contains("--console"));
@@ -21,6 +24,10 @@ namespace AspCore
                 var pathToContentRoot = Path.GetDirectoryName(pathToExe);
                 Directory.SetCurrentDirectory(pathToContentRoot);
             }
+
+            var configBuilder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json");
+            Configuration = configBuilder.Build();
 
             var builder = CreateWebHostBuilder(args.Where(arg => arg != "--console").ToArray());
 
@@ -38,6 +45,7 @@ namespace AspCore
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseUrls(Configuration.GetValue<string>("Urls"))
                 .ConfigureLogging((hostingContext, logging) =>
                 {
                     logging.AddEventLog();
