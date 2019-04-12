@@ -50,8 +50,12 @@ namespace TimeReport.Services
                 {
                     driver.Navigate().GoToUrl(link.href);
 
-                    var workLoadLink = driver.WaitUntil(d => d.FindElement(By.CssSelector("a #worklog-tabpanel")));
-                    workLoadLink?.Click();
+                    var workLoadLink = driver.WaitUntil(d => d.FindElement(By.Id("worklog-tabpanel")));
+                    if (workLoadLink != null)
+                    {
+                        workLoadLink?.Click();
+                        Thread.Sleep(500);
+                    }
 
                     var actionContainers = driver
                         .WaitUntil(d => d.FindElements(By.CssSelector(".actionContainer")));
@@ -62,7 +66,7 @@ namespace TimeReport.Services
                         foreach (var ac in actionContainers)
                         {
                             var date = ac.FindElement(By.CssSelector(".action-details span .date"));
-                            var spent = ac.FindElement(By.CssSelector(".worklog-duration"));
+                            var spent = GetWorkDuration(link.href, ac);
 
                             task.Itmes.Add(new TimeTrackingTaskItemDto(DateTime.Parse(date.Text), spent.Text, ""));
                         }
@@ -72,6 +76,18 @@ namespace TimeReport.Services
             }
 
             return result;
+        }
+
+        private IWebElement GetWorkDuration(string link, IWebElement el)
+        {
+            try
+            {
+                return el.FindElement(By.CssSelector(".worklog-duration"));
+            }
+            catch (NoSuchElementException)
+            {
+                throw new Exception($"Not found class 'worklog-duration' on {link}");
+            }
         }
     }
 }
