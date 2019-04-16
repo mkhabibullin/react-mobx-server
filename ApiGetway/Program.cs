@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using TimeReport;
 
 namespace ApiGetway
@@ -28,8 +29,7 @@ namespace ApiGetway
                 .AddJsonFile("appsettings.json");
             Configuration = configBuilder.Build();
 
-            var builder = CreateWebHostBuilder(
-            args.Where(arg => arg != "--console").ToArray());
+            var builder = CreateWebHostBuilder(args.Where(arg => arg != "--console").ToArray());
 
             var host = builder.Build();
 
@@ -59,6 +59,23 @@ namespace ApiGetway
                         .AddJsonFile("ocelot.json")
                         .AddEnvironmentVariables();
                 })
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .UseKestrel((options) =>
+                {
+                    X509Store x509Store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
+                    x509Store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+
+                    X509Certificate2Collection collection = x509Store.Certificates.Find(X509FindType.FindBySubjectName, "i2x2.net", true);
+                    //X509Certificate2Collection collection = x509Store.Certificates.Find(X509FindType.FindBySubjectName, "localhost", true);
+
+                    if (collection.Count > 0)
+                    {
+                        options.ConfigureHttpsDefaults(httpsOptions =>
+                        {
+                            // certificate is an X509Certificate2
+                            httpsOptions.ServerCertificate = collection[0];
+                        });
+                    }
+                });
     }
 }
