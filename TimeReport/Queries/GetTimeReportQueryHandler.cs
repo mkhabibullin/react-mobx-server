@@ -44,9 +44,13 @@ namespace TimeReport.Queries
                                 var v = m.ToString();
                                 if(!string.IsNullOrWhiteSpace(v))
                                 {
-                                    if(v.Contains("min"))
+                                    if(v.Contains("min", StringComparison.InvariantCultureIgnoreCase))
                                     {
                                         result += v.ParseFloat() / 60;
+                                    }
+                                    else if (v.Contains("day", StringComparison.InvariantCultureIgnoreCase))
+                                    {
+                                        result += v.ParseFloat() * 8;
                                     }
                                     else
                                     {

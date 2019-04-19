@@ -53,6 +53,7 @@ namespace TimeReport.Services
                     var workLoadLink = driver.WaitUntil(d => d.FindElement(By.Id("worklog-tabpanel")));
                     if (workLoadLink != null)
                     {
+                        Thread.Sleep(500);
                         workLoadLink?.Click();
                         Thread.Sleep(500);
                     }
