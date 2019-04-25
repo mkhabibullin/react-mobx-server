@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
@@ -14,11 +15,14 @@ namespace TimeReport.Services
 {
     public class SeleniumParseJiraTImeReport : IParseJiraTimeReport
     {
-        public IOptions<SeleniumConfig> SeleniumConfig { get; }
+        private readonly ILogger<SeleniumParseJiraTImeReport> _logger;
 
-        public SeleniumParseJiraTImeReport(IOptions<SeleniumConfig> seleniumConfig)
+        private readonly IOptions<SeleniumConfig> _seleniumConfig;
+
+        public SeleniumParseJiraTImeReport(IOptions<SeleniumConfig> seleniumConfig, ILogger<SeleniumParseJiraTImeReport> logger)
         {
-            SeleniumConfig = seleniumConfig;
+            _seleniumConfig = seleniumConfig;
+            _logger = logger;
         }
 
         public TimeTrackingDto GetTimeTrackingByLink(string url, string email, string pass, DateTime dateFrom, DateTime dateTo)
@@ -26,9 +30,13 @@ namespace TimeReport.Services
             var result = new TimeTrackingDto();
 
             var chromeOptions = new ChromeOptions();
-            if(SeleniumConfig.Value.Headless) chromeOptions.AddArguments("headless");
+            if(_seleniumConfig.Value.Headless) chromeOptions.AddArguments("headless");
 
-            using (var driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), chromeOptions))
+            var chromeDriverPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            _logger.LogInformation($"The path is: {chromeDriverPath}");
+
+            using (var driver = new ChromeDriver(chromeDriverPath, chromeOptions))
             {
                 driver.Navigate().GoToUrl(url);
 
