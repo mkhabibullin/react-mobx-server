@@ -8,8 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using TimeReport.Extensions;
 using TimeReport.Services;
-using TimeReport.Tests.Extensions;
 
 namespace TimeReport.Tests
 {
@@ -81,7 +81,10 @@ namespace TimeReport.Tests
             var email = Environment.GetEnvironmentVariable("TestReportEmail", EnvironmentVariableTarget.User);
             var pass = Environment.GetEnvironmentVariable("TestReportPass", EnvironmentVariableTarget.User);
 
-            var report = service.GetTimeTrackingByLink(url, email, pass);
+            var dateFrom = DateTime.Now;
+            var dateTo = dateFrom.AddDays(-7);
+
+            var report = service.GetTimeTrackingByLink(url, email, pass, dateFrom, dateTo);
 
             foreach(var t in report.Tasks)
             {
@@ -93,6 +96,17 @@ namespace TimeReport.Tests
                     Trace.WriteLine(i.Date);
                     Trace.WriteLine(i.TimeSpent);
                 }
+            }
+        }
+
+        [TestMethod]
+        public void TestDatesParsing()
+        {
+            var dates = new[] { ", сегодня", ", 18 апреля" };
+
+            foreach(var d in dates)
+            {
+                Trace.WriteLine($"{d} - {d.ParseDate().ToShortDateString()}");
             }
         }
     }

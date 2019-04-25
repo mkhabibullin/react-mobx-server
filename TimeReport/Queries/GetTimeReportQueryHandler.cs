@@ -22,7 +22,7 @@ namespace TimeReport.Queries
         public async Task<TimeReportItemDto[]> Handle(GetTimeReportQuery request, CancellationToken cancellationToken)
         {
             var timeTracking = _parseJiraTimeReport
-                .GetTimeTrackingByLink(request.Url, request.Email, request.Pass);
+                .GetTimeTrackingByLink(request.Url, request.Email, request.Pass, request.DateFrom, request.DateTo);
 
             Func<TimeTrackingTaskItemDto, bool> itemsFilter = ti => request.DateFrom.Date <= ti.Date.Date && ti.Date.Date <= request.DateTo.Date;
 

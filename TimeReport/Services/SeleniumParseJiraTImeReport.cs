@@ -12,7 +12,7 @@ namespace TimeReport.Services
 {
     public class SeleniumParseJiraTImeReport : IParseJiraTimeReport
     {
-        public TimeTrackingDto GetTimeTrackingByLink(string url, string email, string pass)
+        public TimeTrackingDto GetTimeTrackingByLink(string url, string email, string pass, DateTime dateFrom, DateTime dateTo)
         {
             var result = new TimeTrackingDto();
 
@@ -26,36 +26,44 @@ namespace TimeReport.Services
                 var emailInput = driver.FindElement(By.Id("username"));
                 emailInput.SendKeys(email);
 
-                var button = driver.WaitUntil(d => d.FindElement(By.Id("login-submit")));
-                button.Click();
+                var nextButton = driver.WaitUntil(d => d.FindElement(By.Id("login-submit")));
+                nextButton.Click();
 
                 Thread.Sleep(1000);
                 var passwordInput = driver.FindElement(By.Id("password"));
                 passwordInput.SendKeys(pass);
 
-                var button2 = driver.WaitUntil(d => d.FindElement(By.Id("login-submit")));
-                button2.Click();
+                var loginButton = driver.WaitUntil(d => d.FindElement(By.Id("login-submit")));
+                loginButton.Click();
 
                 var tbody = driver.WaitUntil(d => d.FindElement(By.CssSelector("tbody")));
-                var links = tbody.FindElements(By.CssSelector("tbody a"));
+                var tasksRows = tbody.FindElements(By.CssSelector("tbody tr"));
 
-                var linksData = links
-                    .Select(e => new
-                    {
-                        title = e.GetAttribute("title"),
-                        href = e.GetAttribute("href")
-                    }).ToList();
+                var links = tasksRows
+                    .Select(tr => {
+                        var link = tr.FindElement(By.CssSelector("a"));
+                        var date = tr.FindElement(By.CssSelector("td:nth-of-type(2) div")).Text;
+                        return new
+                        {
+                            title = link.GetAttribute("title"),
+                            href = link.GetAttribute("href"),
+                            date = date.ParseDate()
+                        };
+                    }).ToArray();
 
-                foreach (var link in linksData)
+                links = links
+                    .Where(l => l.date.Date >= dateFrom.Date && l.date.Date <= dateTo.Date)
+                    .ToArray();
+
+                foreach (var link in links)
                 {
                     driver.Navigate().GoToUrl(link.href);
 
                     var workLoadLink = driver.WaitUntil(d => d.FindElement(By.Id("worklog-tabpanel")));
-                    if (workLoadLink != null)
+                    if (workLoadLink != null && workLoadLink.Displayed && workLoadLink.Enabled)
                     {
-                        Thread.Sleep(500);
                         workLoadLink?.Click();
-                        Thread.Sleep(500);
+                        Thread.Sleep(200);
                     }
 
                     var actionContainers = driver
