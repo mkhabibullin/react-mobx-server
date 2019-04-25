@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -8,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using TimeReport.Configs;
 using TimeReport.Extensions;
 using TimeReport.Services;
 
@@ -75,7 +77,7 @@ namespace TimeReport.Tests
         [TestMethod]
         public void ParseJiraTimeReportServiceTest()
         {
-            var service = new SeleniumParseJiraTImeReport();
+            var service = new SeleniumParseJiraTImeReport(Options.Create<SeleniumConfig>(new SeleniumConfig { Headless = false }));
 
             var url = Environment.GetEnvironmentVariable("TestReportUrl", EnvironmentVariableTarget.Machine);
             var email = Environment.GetEnvironmentVariable("TestReportEmail", EnvironmentVariableTarget.User);
