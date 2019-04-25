@@ -1,10 +1,12 @@
-﻿using OpenQA.Selenium;
+﻿using Microsoft.Extensions.Options;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using TimeReport.Configs;
 using TimeReport.Dto;
 using TimeReport.Extensions;
 
@@ -12,12 +14,19 @@ namespace TimeReport.Services
 {
     public class SeleniumParseJiraTImeReport : IParseJiraTimeReport
     {
+        public IOptions<SeleniumConfig> SeleniumConfig { get; }
+
+        public SeleniumParseJiraTImeReport(IOptions<SeleniumConfig> seleniumConfig)
+        {
+            SeleniumConfig = seleniumConfig;
+        }
+
         public TimeTrackingDto GetTimeTrackingByLink(string url, string email, string pass, DateTime dateFrom, DateTime dateTo)
         {
             var result = new TimeTrackingDto();
 
             var chromeOptions = new ChromeOptions();
-            chromeOptions.AddArguments("headless");
+            if(SeleniumConfig.Value.Headless) chromeOptions.AddArguments("headless");
 
             using (var driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), chromeOptions))
             {

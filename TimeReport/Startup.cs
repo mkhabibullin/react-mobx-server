@@ -9,6 +9,7 @@ using MongoDbRepository.Extensions;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Reflection;
+using TimeReport.Configs;
 using TimeReport.ModelBinders;
 using TimeReport.Services;
 
@@ -44,6 +45,13 @@ namespace TimeReport
             services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly);
 
             services.AddTransient<IParseJiraTimeReport, SeleniumParseJiraTImeReport>();
+
+            #region Options
+
+            services.AddOptions();
+            services.Configure<SeleniumConfig>(Configuration.GetSection("Selenium"));
+
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
