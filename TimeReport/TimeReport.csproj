@@ -31,7 +31,7 @@
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.1" />
     <PackageReference Include="Selenium.Support" Version="3.141.0" />
     <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="73.0.3683.68" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="74.0.3729.6" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
   </ItemGroup>
 
