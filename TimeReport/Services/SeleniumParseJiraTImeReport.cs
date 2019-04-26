@@ -34,7 +34,7 @@ namespace TimeReport.Services
 
             var chromeDriverPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-            _logger.LogInformation($"The path is: {chromeDriverPath}");
+            _logger.LogWarning($"The path is: {chromeDriverPath}"); // TODO: prod test only
 
             using (var driver = new ChromeDriver(chromeDriverPath, chromeOptions))
             {
