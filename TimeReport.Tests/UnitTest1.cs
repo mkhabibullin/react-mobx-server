@@ -1,3 +1,6 @@
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
@@ -77,7 +80,13 @@ namespace TimeReport.Tests
         [TestMethod]
         public void ParseJiraTimeReportServiceTest()
         {
-            var service = new SeleniumParseJiraTImeReport(Options.Create<SeleniumConfig>(new SeleniumConfig { Headless = false }));
+            var serviceProvider = new ServiceCollection()
+                .AddLogging()
+                .BuildServiceProvider();
+            var factory = serviceProvider.GetService<ILoggerFactory>();
+            var logger = factory.CreateLogger<SeleniumParseJiraTImeReport>();
+
+            var service = new SeleniumParseJiraTImeReport(Options.Create(new SeleniumConfig { Headless = false }), logger);
 
             var url = Environment.GetEnvironmentVariable("TestReportUrl", EnvironmentVariableTarget.Machine);
             var email = Environment.GetEnvironmentVariable("TestReportEmail", EnvironmentVariableTarget.User);
