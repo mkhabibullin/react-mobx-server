@@ -35,7 +35,7 @@ namespace TimeReport.Extensions
         /// <param name="condition"></param>
         /// <param name="seconds">optional param, number of seconds</param>
         /// <returns></returns>
-        public static TResult WaitUntil<TResult>(this IWebDriver driver, Func<IWebDriver, TResult> condition, int seconds = 15)
+        public static TResult WaitUntil<TResult>(this IWebDriver driver, Func<IWebDriver, TResult> condition, int seconds = 30)
         {
             try
             {

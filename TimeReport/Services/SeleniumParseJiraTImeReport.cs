@@ -51,6 +51,7 @@ namespace TimeReport.Services
                 var loginButton = driver.WaitUntil(d => d.FindElement(By.Id("login-submit")));
                 loginButton.Click();
 
+                Thread.Sleep(10000);
                 var tbody = driver.WaitUntil(d => d.FindElement(By.CssSelector("tbody")));
                 var tasksRows = tbody.FindElements(By.CssSelector("tbody tr"));
 
