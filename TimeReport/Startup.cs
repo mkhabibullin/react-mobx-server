@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using MediatR.Pipeline;
+using MicroserviceHeartbeat;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +32,7 @@ namespace TimeReport
                 {
                     options.ModelBinderProviders.Insert(0, new DateTimeModelBinderProvider());
                 })
+                .AddMicrosoftHeartbeat()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.RegisterMongoDbRepository(Configuration, Environment.GetEnvironmentVariable("TimeReportMongoDbPassword", EnvironmentVariableTarget.Machine));

@@ -1,6 +1,7 @@
 ﻿using Application.Files.Queries;
 using MediatR;
 using MediatR.Pipeline;
+using MicroserviceHeartbeat;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,10 @@ namespace AspCore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services
+                .AddMvc()
+                .AddMicrosoftHeartbeat()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             
             services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
             {

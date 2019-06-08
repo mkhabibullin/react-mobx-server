@@ -36,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MicroserviceHeartbeat\MicroserviceHeartbeat.csproj" />
     <ProjectReference Include="..\MongoDbRepository\MongoDbRepository.csproj" />
   </ItemGroup>
 
