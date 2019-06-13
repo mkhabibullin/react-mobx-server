@@ -21,7 +21,23 @@ namespace ApiGetway
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
+            {
+                builder
+                .WithOrigins(
+                    "http://localhost:3000",
+                    "https://localhost:3000",
+                    "http://i2x2.net",
+                    "https://i2x2.net",
+                    "http://localhost",
+                    "http://localhost:80"
+                )
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+            }));
 
             // Enables injection of service
             // dependencies of Ocelot.
@@ -45,14 +61,16 @@ namespace ApiGetway
             {
                 app.UseHsts();
             }
+            app.UseCors("CorsPolicy");
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseMvc();
 
             app.UseStaticFiles();
 
             app.UseSwaggerForOcelotUI(Configuration);
 
+            app.UseWebSockets();
             app.UseOcelot().Wait();
         }
     }

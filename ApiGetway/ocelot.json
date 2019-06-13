@@ -10,7 +10,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/app/{everything}",
-      "UpstreamHttpMethod": []
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ]
     },
     {
       "DownstreamPathTemplate": "/api/{everything}",
@@ -22,8 +22,20 @@
         }
       ],
       "UpstreamPathTemplate": "/api/tr/{everything}",
-      "UpstreamHttpMethod": ["Get", "Post"],
+      "UpstreamHttpMethod": [ "Get", "Post" ],
       "SwaggerKey": "TimeReport"
+    },
+    {
+      "DownstreamPathTemplate": "/{catchAll}",
+      "DownstreamScheme": "ws",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/ws/{catchAll}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ]
     }
   ],
   "SwaggerEndPoints": [
