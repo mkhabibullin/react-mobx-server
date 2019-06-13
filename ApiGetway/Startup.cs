@@ -59,7 +59,7 @@ namespace ApiGetway
             }
             else
             {
-                app.UseHsts();
+                //app.UseHsts();
             }
             app.UseCors("CorsPolicy");
 
