@@ -26,15 +26,18 @@ namespace AspCore
             services
                 .AddMvc()
                 .AddMicrosoftHeartbeat()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             
             services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
             {
                 builder
+                .WithOrigins(
+                    "http://localhost:5000",
+                    "https://localhost:5001"
+                )
                 .AllowAnyMethod()
                 .AllowAnyHeader()
-                .AllowCredentials()
-                .AllowAnyOrigin();
+                .AllowCredentials();
             }));
 
             services.AddSignalR();

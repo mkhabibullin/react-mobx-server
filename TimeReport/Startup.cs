@@ -33,7 +33,7 @@ namespace TimeReport
                     options.ModelBinderProviders.Insert(0, new DateTimeModelBinderProvider());
                 })
                 .AddMicrosoftHeartbeat()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.RegisterMongoDbRepository(Configuration, Environment.GetEnvironmentVariable("TimeReportMongoDbPassword", EnvironmentVariableTarget.Machine));
 
