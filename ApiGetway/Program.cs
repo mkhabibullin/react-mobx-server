@@ -59,23 +59,23 @@ namespace ApiGetway
                         .AddJsonFile("ocelot.json")
                         .AddEnvironmentVariables();
                 })
-                .UseStartup<Startup>()
-                .UseKestrel((options) =>
-                {
-                    X509Store x509Store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
-                    x509Store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+                .UseStartup<Startup>();
+                //.UseKestrel((options) =>
+                //{
+                //    X509Store x509Store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
+                //    x509Store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
 
-                    X509Certificate2Collection collection = x509Store.Certificates.Find(X509FindType.FindBySubjectName, "i2x2.net", true);
-                    //X509Certificate2Collection collection = x509Store.Certificates.Find(X509FindType.FindBySubjectName, "localhost", true);
+                //    X509Certificate2Collection collection = x509Store.Certificates.Find(X509FindType.FindBySubjectName, "i2x2.net", true);
+                //    //X509Certificate2Collection collection = x509Store.Certificates.Find(X509FindType.FindBySubjectName, "localhost", true);
 
-                    if (collection.Count > 0)
-                    {
-                        options.ConfigureHttpsDefaults(httpsOptions =>
-                        {
-                            // certificate is an X509Certificate2
-                            httpsOptions.ServerCertificate = collection[0];
-                        });
-                    }
-                });
+                //    if (collection.Count > 0)
+                //    {
+                //        options.ConfigureHttpsDefaults(httpsOptions =>
+                //        {
+                //            // certificate is an X509Certificate2
+                //            httpsOptions.ServerCertificate = collection[0];
+                //        });
+                //    }
+                //});
     }
 }
