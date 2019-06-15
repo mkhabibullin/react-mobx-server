@@ -1,11 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -105,7 +103,7 @@ namespace TimeReport.Tests
                 foreach(var i in t.Itmes)
                 {
                     Trace.WriteLine(i.Date);
-                    Trace.WriteLine(i.TimeSpent);
+                    Trace.WriteLine(i.TimeSpentSeconds);
                 }
             }
         }

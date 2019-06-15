@@ -25,16 +25,16 @@ namespace TimeReport.Dto
 
     public class TimeTrackingTaskItemDto
     {
-        public TimeTrackingTaskItemDto(DateTime date, string timeSpent, string comment)
+        public TimeTrackingTaskItemDto(DateTime date, long timeSpentSeconds, string comment)
         {
             Date = date;
-            TimeSpent = timeSpent;
+            TimeSpentSeconds = timeSpentSeconds;
             Comment = comment;
         }
 
         public DateTime Date { get; set; }
 
-        public string TimeSpent { get; set; }
+        public long TimeSpentSeconds { get; set; }
 
         public string Comment { get; set; }
     }

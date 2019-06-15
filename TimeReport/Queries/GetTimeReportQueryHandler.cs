@@ -1,11 +1,10 @@
 ﻿using MediatR;
+using NSpecifications;
 using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using TimeReport.Dto;
-using TimeReport.Extensions;
 using TimeReport.Services;
 
 namespace TimeReport.Queries
@@ -24,48 +23,15 @@ namespace TimeReport.Queries
             var timeTracking = _parseJiraTimeReport
                 .GetTimeTrackingByLink(request.Url, request.Email, request.Pass, request.DateFrom, request.DateTo);
 
-            Func<TimeTrackingTaskItemDto, bool> itemsFilter = ti => request.DateFrom.Date <= ti.Date.Date && ti.Date.Date <= request.DateTo.Date;
+            var itemsIsActualSpec = new Spec<TimeTrackingTaskItemDto>(ti => request.DateFrom.Date <= ti.Date.Date && ti.Date.Date <= request.DateTo.Date);
 
             var items = timeTracking
                 .Tasks
-                .Where(t => t.Itmes.Any(itemsFilter))
+                .Where(t => t.Itmes.Any(itemsIsActualSpec))
                 .Select(t => new TimeReportItemDto(
                     t.Name, 
                     t.Link, 
-                    t.Itmes.Where(itemsFilter).Aggregate(0f, (sum, i) => {
-                        var result = sum;
-
-                        var timePartsMatches = Regex.Matches(i.TimeSpent, @"\d+ \w+");
-
-                        if (timePartsMatches.Any())
-                        {
-                            foreach (var m in timePartsMatches)
-                            {
-                                var v = m.ToString();
-                                if(!string.IsNullOrWhiteSpace(v))
-                                {
-                                    if(v.Contains("min", StringComparison.InvariantCultureIgnoreCase))
-                                    {
-                                        result += v.ParseFloat() / 60;
-                                    }
-                                    else if (v.Contains("day", StringComparison.InvariantCultureIgnoreCase))
-                                    {
-                                        result += v.ParseFloat() * 8;
-                                    }
-                                    else
-                                    {
-                                        result += v.ParseFloat();
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            result += i.TimeSpent.ParseFloat();
-                        }
-
-                        return result;
-                    })))
+                    t.Itmes.Where(itemsIsActualSpec).Aggregate(0f, (sum, i) => sum + (i.TimeSpentSeconds / 60 / 60))))
                 .ToArray();
 
             return items;
