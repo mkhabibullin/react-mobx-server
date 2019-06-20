@@ -32,8 +32,10 @@ namespace AspCore
             {
                 builder
                 .WithOrigins(
-                    "http://localhost:5000",
-                    "https://localhost:5001"
+                    "http://localhost:5000", // production
+                    "https://localhost:5001", // production TLS
+                    "http://localhost:3000", // npm start
+                    "http://localhost" // npm run build:dev
                 )
                 .AllowAnyMethod()
                 .AllowAnyHeader()
