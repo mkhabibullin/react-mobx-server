@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using NSpecifications;
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,7 +30,7 @@ namespace TimeReport.Queries
                 .Select(t => new TimeReportItemDto(
                     t.Name, 
                     t.Link, 
-                    t.Itmes.Where(itemsIsActualSpec).Aggregate(0f, (sum, i) => sum + (i.TimeSpentSeconds / 60 / 60))))
+                    t.Itmes.Where(itemsIsActualSpec).Aggregate(0f, (sum, i) => sum + (i.TimeSpentSeconds / 60f / 60f))))
                 .ToArray();
 
             return items;
