@@ -25,6 +25,11 @@ namespace TimeReport.Dto
 
     public class TimeTrackingTaskItemDto
     {
+        public TimeTrackingTaskItemDto()
+        {
+
+        }
+
         public TimeTrackingTaskItemDto(DateTime date, long timeSpentSeconds, string comment)
         {
             Date = date;

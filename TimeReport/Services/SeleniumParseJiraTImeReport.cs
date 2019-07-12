@@ -1,4 +1,5 @@
-﻿using CodeSuperior.PipelineStyle;
+﻿using AutoMapper;
+using CodeSuperior.PipelineStyle;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using System.Reflection;
 using System.Threading;
 using TimeReport.Configs;
 using TimeReport.Dto;
+using TimeReport.Dto.Jira;
 using TimeReport.Extensions;
 
 namespace TimeReport.Services
@@ -20,18 +22,19 @@ namespace TimeReport.Services
     public class SeleniumParseJiraTImeReport : IParseJiraTimeReport
     {
         private readonly ILogger<SeleniumParseJiraTImeReport> _logger;
-
-        private readonly IOptions<SeleniumConfig> _seleniumConfig;
+        private readonly SeleniumConfig _seleniumConfig;
+        private readonly IMapper _mapper;
 
         private string ChromeDriverPath => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
         private ChromeOptions ChromeOptions => new ChromeOptions()
-            .DoIf(_seleniumConfig.Value.Headless, AsHeadless);
+            .DoIf(_seleniumConfig.Headless, AsHeadless);
 
-        public SeleniumParseJiraTImeReport(IOptions<SeleniumConfig> seleniumConfig, ILogger<SeleniumParseJiraTImeReport> logger)
+        public SeleniumParseJiraTImeReport(IOptions<SeleniumConfig> seleniumConfig, ILogger<SeleniumParseJiraTImeReport> logger, IMapper mapper)
         {
-            _seleniumConfig = seleniumConfig;
+            _seleniumConfig = seleniumConfig.Value;
             _logger = logger;
+            _mapper = mapper;
         }
 
         public TimeTrackingDto GetTimeTrackingByLink(string url, string email, string pass, DateTime dateFrom, DateTime dateTo)
@@ -61,26 +64,23 @@ namespace TimeReport.Services
                         var task = new TimeTrackingTaskDto(link.Title, link.Href);
 
                         // 3. Geting work logs
-                        var workLogsJson = link
+                        var jiraWorkLogsData = link
                             .To(FindTaskNum)
                             .To(GetWorkLogUrl)
                             .Do(NavigateToUrl)
                             .To(_ => driver.FindElement(By.TagName("body")).Text)
-                            .To(JsonConvert.DeserializeObject<dynamic>);
+                            .To(JsonConvert.DeserializeObject<JiraWorkLogsDto>);
 
-                        foreach (var workLog in workLogsJson.worklogs)
-                        {
-                            var created = DateTime.Parse((string)workLog.created);
-                            var timeSpentSeconds = (int)workLog.timeSpentSeconds;
+                        // 4. Mapping to model
+                        task.Itmes = jiraWorkLogsData.Worklogs
+                            .Select(_mapper.Map<TimeTrackingTaskItemDto>)
+                            .ToList();
 
-                            task.Itmes.Add(new TimeTrackingTaskItemDto(created, timeSpentSeconds, ""));
-                        }
                         result.Tasks.Add(task);
                     }
                     catch (Exception exc)
                     {
-                        result.Tasks.Add(new TimeTrackingTaskDto("FAILED: " + link.Title, link.Href));
-                        _logger.LogCritical("Error in parsing a task page", exc);
+                        _logger.LogCritical($"Error in parsing the page {link}", exc);
                     }
                 }
 

@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using MediatR.Pipeline;
 using MicroserviceHeartbeat;
 using Microsoft.AspNetCore.Builder;
@@ -41,6 +42,8 @@ namespace TimeReport
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
             });
+
+            services.AddAutoMapper(typeof(Startup).GetTypeInfo().Assembly);
 
             // Add MediatR
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));

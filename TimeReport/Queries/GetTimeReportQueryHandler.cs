@@ -22,7 +22,8 @@ namespace TimeReport.Queries
             var timeTracking = _parseJiraTimeReport
                 .GetTimeTrackingByLink(request.Url, request.Email, request.Pass, request.DateFrom, request.DateTo);
 
-            var itemsIsActualSpec = new Spec<TimeTrackingTaskItemDto>(ti => request.DateFrom.Date <= ti.Date.Date && ti.Date.Date <= request.DateTo.Date);
+            var itemsIsActualSpec = 
+                new Spec<TimeTrackingTaskItemDto>(ti => request.DateFrom.Date <= ti.Date.Date && ti.Date.Date <= request.DateTo.Date);
 
             var items = timeTracking
                 .Tasks
@@ -30,7 +31,8 @@ namespace TimeReport.Queries
                 .Select(t => new TimeReportItemDto(
                     t.Name, 
                     t.Link, 
-                    t.Itmes.Where(itemsIsActualSpec).Aggregate(0f, (sum, i) => sum + (i.TimeSpentSeconds / 60f / 60f))))
+                    t.Itmes.Where(itemsIsActualSpec).Aggregate(0f, (sum, i) => sum + (i.TimeSpentSeconds / 60f / 60f))
+                ))
                 .ToArray();
 
             return items;
