@@ -7,5 +7,7 @@
         public string Link { get; set; }
 
         public float Hours { get; set; }
+
+        public string Comments { get; set; }
     }
 }

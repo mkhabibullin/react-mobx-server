@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -12,6 +13,7 @@ using System.Reflection;
 using System.Threading;
 using TimeReport.Configs;
 using TimeReport.Extensions;
+using TimeReport.Profiles;
 using TimeReport.Services;
 
 namespace TimeReport.Tests
@@ -19,6 +21,13 @@ namespace TimeReport.Tests
     [TestClass]
     public class UnitTest1
     {
+        [ClassInitialize]
+        public static void StartUp(TestContext context)
+        {
+            Mapper.Initialize(m => m.AddProfile<TimeTrackingProfile>());
+            Mapper.AssertConfigurationIsValid();
+        }
+
         [TestMethod]
         public void TestMethod1()
         {
@@ -84,7 +93,7 @@ namespace TimeReport.Tests
             var factory = serviceProvider.GetService<ILoggerFactory>();
             var logger = factory.CreateLogger<SeleniumParseJiraTImeReport>();
 
-            var service = new SeleniumParseJiraTImeReport(Options.Create(new SeleniumConfig { Headless = false }), logger);
+            var service = new SeleniumParseJiraTImeReport(Options.Create(new SeleniumConfig { Headless = false }), logger, Mapper.Instance);
 
             var url = Environment.GetEnvironmentVariable("TestReportUrl", EnvironmentVariableTarget.Machine);
             var email = Environment.GetEnvironmentVariable("TestReportEmail", EnvironmentVariableTarget.User);

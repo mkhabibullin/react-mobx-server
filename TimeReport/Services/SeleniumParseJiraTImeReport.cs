@@ -55,7 +55,7 @@ namespace TimeReport.Services
                     .To(GetTasksUrls)
                     .To(NormalizeTasksUrls)
                     .To(FilterByDateInterval)
-                    .ToArray();
+                    .ToArray(); 
 
                 foreach (var link in links)
                 {

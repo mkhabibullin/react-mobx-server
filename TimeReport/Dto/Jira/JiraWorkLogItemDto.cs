@@ -12,5 +12,22 @@ namespace TimeReport.Dto.Jira
         public string Created { get; set; }
 
         public int TimeSpentSeconds { get; set; }
+
+        public JiraWorkLogItemCommentDto Comment { get; set; }
+    }
+
+    public class JiraWorkLogItemCommentDto
+    {
+        public JiraWorkLogItemCommentContentDto[] Content { get; set; }
+
+        public class JiraWorkLogItemCommentContentDto
+        {
+            public JiraWorkLogItemCommentSubContentDto[] Content { get; set; }
+        }
+
+        public class JiraWorkLogItemCommentSubContentDto
+        {
+            public string Text { get; set; }
+        }
     }
 }
